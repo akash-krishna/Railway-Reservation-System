@@ -1,0 +1,1354 @@
+Imports System.Data.SqlClient
+Public Class Form1
+    Public con As SqlConnection = New SqlConnection("Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; Integrated Security = True")
+    Public type As Integer = 0
+    Public log As Integer
+    Private Sub Form1_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        If log = 0 Then
+            Me.Text = "ADMIN LOGIN"
+            Me.BackgroundImage = WindowsApplication1.My.Resources.Resources.login
+            Label1.Hide()
+            Label3.Hide()
+            Label4.Hide()
+            Label5.Hide()
+            Label6.Hide()
+            Label8.Show()
+            LinkLabel1.Hide()
+            ComboBox1.Hide()
+            ComboBox2.Hide()
+            TextBox1.Show()
+            Button1.Hide()
+            Button2.Hide()
+            Button3.Hide()
+            Button4.Hide()
+            Button5.Hide()
+            MonthCalendar1.Hide()
+        ElseIf log = 1 Then
+            Me.Text = "JOURNEY PLANNER"
+            Me.BackgroundImage = WindowsApplication1.My.Resources.Resources.track
+            Label1.Show()
+            Label3.Show()
+            Label4.Show()
+            Label5.Show()
+            Label6.Show()
+            Label8.Hide()
+            LinkLabel1.Show()
+            ComboBox1.Show()
+            ComboBox2.Show()
+            ComboBox1.SelectedIndex = -1
+            ComboBox2.SelectedIndex = -1
+            Button1.Show()
+            Button2.Show()
+            Button3.Show()
+            Button4.Show()
+            Button5.Show()
+            TextBox1.Hide()
+            MonthCalendar1.Show()
+            MonthCalendar1.MinDate = Today.ToShortDateString
+        End If
+    End Sub
+    Private Sub SUMBIT_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button1.Click
+        If ComboBox1.SelectedItem = "" OrElse ComboBox2.SelectedItem = "" Then
+            MsgBox("PLEASE ENTER A VALID STATION NAME!", MsgBoxStyle.Exclamation, "JOURNEY DETAILS")
+        ElseIf ComboBox1.SelectedItem = ComboBox2.SelectedItem Then
+            MsgBox("FROM AND TO STATION CANNOT BE THE SAME!", MsgBoxStyle.Exclamation, "JOURNEY DETAILS")
+        Else
+            Dim com As SqlCommand = New SqlCommand("select * from TRAINS where FROM_STATION='" + ComboBox1.SelectedItem + "' and TO_STATION='" + ComboBox2.SelectedItem + "'", con)
+            Dim da As SqlDataAdapter = New SqlDataAdapter(com)
+            Dim ds As DataSet = New DataSet() : da.Fill(ds, "TRAINS")
+            Form2.DataGridView1.DataSource = ds.Tables(0).DefaultView
+            If Form2.DataGridView1.RowCount = 0 Then
+                MsgBox("NO MATCHING TRAINS FOUND", MsgBoxStyle.Exclamation, "NOT FOUND")
+            Else : Form2.Show() : Form3.Label2.Text = MonthCalendar1.SelectionStart.ToShortDateString : Me.Hide()
+            End If
+            con.Close()
+        End If
+    End Sub
+    Private Sub CANCEL_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button3.Click
+        Dim com As SqlCommand = New SqlCommand("select * from RECORDS where TICKET_STATUS='CONFIRMED' and JOURNEY_DATE>'" + Today + "'", con)
+        Dim da As SqlDataAdapter = New SqlDataAdapter(com)
+        Dim ds As DataSet = New DataSet()
+        da.Fill(ds, "RECORDS")
+        Form2.DataGridView1.DataSource = ds.Tables(0)
+        If Form2.DataGridView1.Rows.Count = 0 Then
+            MsgBox("NO CANCELLABLE TICKETS FOUND", MsgBoxStyle.Exclamation, "NO RECORDS")
+        Else : type = 1 : Me.Hide() : Form2.Show()
+        End If
+        con.Close()
+    End Sub
+    Private Sub HISTORY_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+        type = 2
+        Me.Hide()
+        Form2.Show()
+    End Sub
+    Private Sub RESET_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button2.Click
+        ComboBox1.SelectedIndex = -1
+        ComboBox2.SelectedIndex = -1
+        MonthCalendar1.SelectionStart = Today.ToShortDateString
+    End Sub
+    Private Sub SWAP_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Dim s As String = ComboBox1.SelectedItem
+        ComboBox1.SelectedItem = ComboBox2.SelectedItem
+        ComboBox2.SelectedItem = s
+    End Sub
+    Private Sub Timer_Tick(ByVal sender As Object, ByVal e As EventArgs) Handles Timer1.Tick
+        Label1.Text = Now + " IST"
+    End Sub
+    Private Sub LOGOUT_LinkClicked(ByVal sender As Object, ByVal e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Dim i As Integer = MsgBox("Are You Sure You Want To Logout...?", MsgBoxStyle.Question + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2 + MsgBoxStyle.ApplicationModal, "LOGOUT")
+        If i = MsgBoxResult.Yes Then
+            log = 0
+            MyBase.OnLoad(e)
+            Label8.Text = "USER ID"
+            TextBox1.Clear()
+            ComboBox1.SelectedIndex = -1
+            ComboBox2.SelectedIndex = -1
+        End If
+    End Sub
+    Private Sub ABOUT_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label2.Click
+        MsgBox("AKASH KRISHNA.S" + vbNewLine + "BACHELOR OF COMPUTER APPLICATIONS," + vbNewLine + "MADRAS CHRISTIAN COLLEGE." + vbNewLine + vbNewLine + "Copyright© 2017 - 157CS214. All Rights Reserved.", MsgBoxStyle.Information, "ABOUT")
+    End Sub
+    Private Sub LOGIN_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged
+        If Label8.Text = "USER ID" Then
+            If TextBox1.Text = "AKASH" And TextBox1.TextLength > 4 Then
+                Label8.Text = "PASSWORD"
+                TextBox1.Clear()
+            ElseIf Not TextBox1.Text = "AKASH" And TextBox1.TextLength > 4 Then
+                MsgBox("INVALID CREDENTIALS!", MsgBoxStyle.Critical, "ERROR")
+                TextBox1.Clear()
+            End If
+        ElseIf Label8.Text = "PASSWORD" Then
+            TextBox1.PasswordChar = "●"
+            If TextBox1.Text = "KRISHNA" And TextBox1.TextLength > 6 Then
+                log = 1
+                TextBox1.PasswordChar = Nothing
+                MyBase.OnLoad(e)
+            ElseIf Not TextBox1.Text = "KRISHNA" And TextBox1.TextLength > 6 Then
+                MsgBox("INVALID CREDENTIALS!", MsgBoxStyle.Critical, "ERROR")
+                TextBox1.Clear()
+            End If
+        End If
+    End Sub
+End Class
+Imports System.Data.SqlClient
+Public Class Form2
+    Public con As SqlConnection = New SqlConnection("Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; Integrated Security = True")
+    Public type As Integer = 0 : Public sa As Integer
+    Private Sub Form2_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        Label1.Hide()
+        Label2.Hide()
+        Label3.Hide()
+        Label20.Hide()
+        Label21.Hide()
+        Label24.Hide()
+        Label25.Hide()
+        Label32.Hide()
+        LinkLabel1.Hide()
+        RadioButton1.Hide()
+        RadioButton2.Hide()
+        RadioButton3.Hide()
+        RadioButton4.Hide()
+        ComboBox16.Hide()
+        If Form1.type = 1 Then
+            Me.Text = "CANCEL TICKET"
+            Me.BackColor = Color.IndianRed
+            Button2.Hide()
+        ElseIf Form1.type = 2 Then
+            RadioButton1.Checked = True
+            RadioButton1.Show()
+            RadioButton2.Show()
+            RadioButton1.Text = "BOOKED HISTORY"
+            RadioButton2.Text = "CANCELLATION HISTORY"
+            Button2.Show()
+        Else
+            Button2.Hide()
+            Label1.Show()
+            Label2.Show()
+            Label3.Show()
+            Label20.Show()
+            Label21.Show()
+            Label32.Show()
+            RadioButton1.Show()
+            RadioButton2.Show()
+            RadioButton3.Show()
+            RadioButton4.Show()
+            Label1.Text = Form1.ComboBox1.SelectedItem
+            Label2.Text = Form1.ComboBox2.SelectedItem
+            Label21.Text = Form1.MonthCalendar1.SelectionStart.ToShortDateString
+            Form3.Label34.Text = RadioButton1.Text
+        End If
+    End Sub
+    Private Sub DataGridClick(ByVal sender As Object, ByVal e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+        Try
+            Dim s As DataGridViewRow = DataGridView1.Rows(e.RowIndex)
+            If Not Form1.type = 0 Then
+                Form4.Label82.Text = s.Cells(0).Value.ToString()
+                Form4.Label57.Text = s.Cells(1).Value.ToString()
+                Form4.Label2.Text = s.Cells(2).Value.ToString()
+                Form4.Label80.Text = s.Cells(3).Value.ToString()
+                Form4.Label86.Text = s.Cells(5).Value.ToString()
+                If Form1.type = 1 Then type = 1 Else type = 2
+                If Form1.type = 2 And RadioButton2.Checked = True Then type = 3
+                Me.Hide()
+                Form4.Show()
+            ElseIf Form1.type = 0 Then
+                Form3.Label21.Text = s.Cells(0).Value.ToString()
+                Form3.Label1.Text = s.Cells(1).Value.ToString()
+                Form3.Label3.Text = s.Cells(2).Value.ToString()
+                Form3.Label19.Text = s.Cells(3).Value.ToString()
+                Form3.Label4.Text = s.Cells(4).Value.ToString()
+                Form3.Label20.Text = s.Cells(5).Value.ToString()
+                Form3.Label23.Text = s.Cells(6).Value.ToString() & "/- Rs."
+                If Form1.MonthCalendar1.SelectionStart = Today And Form3.Label19.Text <= TimeOfDay Then
+                    MsgBox("TRAIN DEPARTED!", MsgBoxStyle.Exclamation, "NOT ALLOWED")
+                Else
+                    Label24.Show()
+                    ComboBox16.Show()
+                    ComboBox16.SelectedIndex = -1
+                    LinkLabel1.Hide()
+                End If
+            End If
+        Catch c As ArgumentOutOfRangeException
+            MsgBox("PLEASE CLICK ON THE ROW CELL TO SELECT THAT TRAIN/RECORD", MsgBoxStyle.Information, "SELECTION")
+        End Try
+    End Sub
+
+    Private Sub RadioButton1_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton1.CheckedChanged
+        If Form1.type = 2 And RadioButton1.Checked = True Then
+            Me.Text = "BOOKED HISTORY"
+            Me.BackColor = Color.CadetBlue
+            Dim com As SqlCommand = New SqlCommand("select * from RECORDS where TICKET_STATUS='CONFIRMED' ORDER BY PNR_NUM DESC", con)
+            Dim da As SqlDataAdapter = New SqlDataAdapter(com)
+            Dim ds As DataSet = New DataSet()
+            da.Fill(ds, "RECORDS")
+            DataGridView1.DataSource = ds.Tables(0)
+            con.Close()
+        ElseIf Form1.type = 0 Then
+            If RadioButton1.Checked = True Then Form3.Label34.Text = RadioButton1.Text
+            LinkLabel1.Hide()
+            ComboBox16.SelectedIndex = -1
+        End If
+    End Sub
+    Private Sub RadioButton2_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton2.CheckedChanged
+        If Form1.type = 2 And RadioButton2.Checked = True Then
+            Me.Text = "CANCELLED HISTORY"
+            Me.BackColor = Color.IndianRed
+            Dim com As SqlCommand = New SqlCommand("select * from CANCELLED where TICKET_STATUS='CANCELLED' ORDER BY PNR_NUM DESC", con)
+            Dim da As SqlDataAdapter = New SqlDataAdapter(com)
+            Dim ds As DataSet = New DataSet()
+            da.Fill(ds, "CANCELLED")
+            DataGridView1.DataSource = ds.Tables(0)
+            con.Close()
+        ElseIf Form1.type = 0 Then
+            If RadioButton2.Checked = True Then Form3.Label34.Text = RadioButton2.Text
+            LinkLabel1.Hide()
+            ComboBox16.SelectedIndex = -1
+            If RadioButton2.Checked = True Then MsgBox("Handicapped passengers need to carry Photo Identity card issued by Railways which is to be produced for On-board / Off-board verification during journey." + vbNewLine + "Escort passengers also need to carry photo identity card mentioned at the time of booking." + vbNewLine + "No normal passenger other than Physically Handicap / Escort is allowed." + vbNewLine + "No Senior Citizen concession will be available for this Quota.", MsgBoxStyle.Information, "PHYSICALLY HANDICAPPED QUOTA")
+        End If
+    End Sub
+    Private Sub CLEAR_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Dim i As Integer = MsgBox("ARE YOU SURE...?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2 + MsgBoxStyle.ApplicationModal, "DELETE OLD RECORDS")
+        If i = MsgBoxResult.Yes Then
+            con.Open()
+            If Form1.type = 2 And RadioButton1.Checked = True Then
+                Dim com As SqlCommand = New SqlCommand("DELETE FROM HISTORY WHERE TICKET_STATUS='CONFIRMED' AND JOURNEY_DATE<'" + Today.ToShortDateString + "' ", con)
+                com.ExecuteNonQuery()
+            ElseIf Form1.type = 2 And RadioButton2.Checked = True Then
+                Dim com As SqlCommand = New SqlCommand("DELETE FROM HISTORY WHERE TICKET_STATUS='CANCELLED'", con)
+                com.ExecuteNonQuery()
+            End If
+            Dim cmd As SqlCommand = New SqlCommand("DELETE FROM DETAILS WHERE PNR_NO NOT IN (SELECT PNR_NUM FROM HISTORY)", con)
+            cmd.ExecuteNonQuery()
+            Me.Close()
+            con.Close()
+            Form1.Show()
+        End If
+    End Sub
+    Private Sub CLASS_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox16.SelectedIndexChanged
+        sa = 0 : Dim ns As Integer = 100 : con.Open()
+        Dim com As SqlCommand = New SqlCommand("SELECT SUM(NO_PASSENGERS) FROM HISTORY WHERE BOOKED_TRAIN = '" + Form3.Label21.Text + "' AND JOURNEY_DATE='" + Label21.Text.ToString + "' AND QUOTA='" + Form3.Label34.Text + "' AND CLASS='" + ComboBox16.SelectedItem + "' AND TICKET_STATUS='CONFIRMED'", con)
+        Dim dr = com.ExecuteReader():dr.Read()
+        If Not dr.IsDBNull(0) Then sa = dr(0)
+        sa = ns - sa
+        Label25.Show() : LinkLabel1.Show()
+        If sa <= 0 Then LinkLabel1.Enabled = False
+        If sa >= 1 And sa < 6 Then
+            LinkLabel1.Text = "CURR_AVBL : " & sa:Form3.NumericUpDown6.Maximum = sa
+        Else : LinkLabel1.Text = "CURR_AVBL : " & sa:Form3.NumericUpDown6.Maximum = 6
+        End If:con.Close()
+    End Sub
+
+    Private Sub SEAT_LinkClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        Form3.Label24.Text = ComboBox16.SelectedItem
+        Form3.Show():Me.Hide()
+    End Sub
+    Private Sub RETURN_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button1.Click
+        Me.Close()
+        Form1.type = 0
+        Form1.Show()
+    End Sub
+    Private Sub LADIES(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton3.CheckedChanged
+        If RadioButton3.Checked = True Then Form3.Label34.Text = RadioButton3.Text
+        LinkLabel1.Hide()
+        ComboBox16.SelectedIndex = -1
+    End Sub
+    Private Sub TATKAL(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioButton4.CheckedChanged
+        If Not Form1.type = 1 Or Form1.type = 2 Then
+            If RadioButton4.Checked = True Then
+                MsgBox("Tatkal is available only between 9:45 – 10:15 (AC) and 10:45 – 11:15 (Sleeper)", MsgBoxStyle.Information, "NOT AVAILABLE")
+                RadioButton4.Checked = False
+                RadioButton1.Checked = True
+                LinkLabel1.Hide()
+                ComboBox16.SelectedIndex = -1
+            End If
+        End If
+    End Sub
+    Public Sub DataGridView_ColumnClick(ByVal sender As Object, ByVal e As DataGridViewCellMouseEventArgs) Handles DataGridView1.RowHeaderMouseClick
+        MsgBox("CLICK ON THE ROW CELLS TO SELECT THAT TRAIN/RECORD", MsgBoxStyle.Information, "SELECTION")
+    End Sub
+End Class
+Public Class Form3
+    Public pn(11), pg(19), pa(7) As String
+    Private Sub Form3_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        Button1.Hide()
+        Dim i As Integer
+        For i = 2 To 12
+            If i = 6 Then
+                i += 1
+            End If
+            Dim txt = Controls("TextBox" & i)
+            txt.Hide()
+        Next
+        For i = 2 To 7
+            If i = 6 Then
+                i += 1
+            End If
+            Dim nud = Controls("NumericUpDown" & i)
+            nud.Hide()
+        Next
+        For i = 13 To 32
+            If i = 17 Then
+                i += 15
+            End If
+            Dim lbl = Controls("Label" & i)
+            lbl.Hide()
+        Next
+        For i = 2 To 19
+            If i = 16 Or i = 6 Or i = 11 Then
+                i += 1
+            End If
+            Dim cmb = Controls("ComboBox" & i)
+            cmb.Hide()
+        Next
+        For i = 6 To 18
+            If i = 11 Then
+                i += 7
+            End If
+            Dim cmb = Controls("ComboBox" & i)
+            cmb.Text = "No Preference"
+        Next
+        For i = 11 To 17
+            If i = 16 Then
+                i += 1
+            End If
+            Dim cmb = Controls("ComboBox" & i)
+            cmb.Text = "India"
+        Next
+    End Sub
+
+    Private Sub BOOKNOW_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button1.Click
+        For i As Integer = 1 To 11:Dim txt = Controls("TextBox" & i):pn(i) = txt.Text:Next
+        For i As Integer = 1 To 7 : If i = 6 Then i += 1
+            Dim txt = Controls("NumericUpDown" & i) : pa(i) = txt.Text : Next
+        For i As Integer = 1 To 19 : If i = 16 Then i += 1
+            Dim txt = Controls("ComboBox" & i) : pg(i) = txt.Text : Next
+
+        If NumericUpDown6.Value = 1 Then
+            If TextBox1.Text = "" Or NumericUpDown1.Value = 0 Or ComboBox1.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox11.SelectedItem = "" Then
+                MsgBox("PLEASE ENTER ALL THE DETAILS CORRECTLY.", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown1.Value > 11 And ComboBox1.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown1.Value = 0
+                ComboBox1.Text = ""
+            ElseIf ComboBox6.SelectedItem = "No Berth" Then
+                MsgBox("Number of child without berth option must be equal to number of passengers with berth", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf NumericUpDown1.Value < 5 Then
+                MsgBox("Ticket(s) Not To Be Issued!", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            Else : Form4.Show() : Me.Hide()
+            End If
+
+        ElseIf NumericUpDown6.Value = 2 Then
+            If TextBox1.Text = "" Or NumericUpDown1.Value = 0 Or ComboBox1.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox11.SelectedItem = "" Or TextBox2.Text = "" Or NumericUpDown2.Value = 0 Or ComboBox2.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox12.SelectedItem = "" Then
+                MsgBox("PLEASE ENTER ALL THE DETAILS CORRECTLY.", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown1.Value > 11 And ComboBox1.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown1.Value = 0
+                ComboBox1.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown2.Value > 11 And ComboBox2.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown2.Value = 0
+                ComboBox2.Text = ""
+            ElseIf ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedIndex > 5 Then
+                MsgBox("Number of child without berth option must be equal to number of passengers with berth", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf NumericUpDown1.Value < 5 And NumericUpDown2.Value < 5 Then
+                MsgBox("Ticket(s) Not To Be Issued!", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            Else : Form4.Show() : Me.Hide()
+            End If
+
+        ElseIf NumericUpDown6.Value = 3 Then
+            If TextBox1.Text = "" Or NumericUpDown1.Value = 0 Or ComboBox1.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox11.SelectedItem = "" Or TextBox2.Text = "" Or NumericUpDown2.Value = 0 Or ComboBox2.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox12.SelectedItem = "" Or TextBox3.Text = "" Or NumericUpDown3.Value = 0 Or ComboBox3.SelectedItem = "" Or ComboBox8.SelectedItem = "" Or ComboBox13.SelectedItem = "" Then
+                MsgBox("PLEASE ENTER ALL THE DETAILS CORRECTLY.", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown1.Value > 11 And ComboBox1.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown1.Value = 0
+                ComboBox1.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown2.Value > 11 And ComboBox2.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown2.Value = 0
+                ComboBox2.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown3.Value > 11 And ComboBox3.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown3.Value = 0
+                ComboBox3.Text = ""
+            ElseIf ComboBox8.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox6.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" Then
+                MsgBox("Number of child without berth option must be equal to number of passengers with berth", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf NumericUpDown1.Value < 5 And NumericUpDown2.Value < 5 And NumericUpDown3.Value < 5 Then
+                MsgBox("Ticket(s) Not To Be Issued!", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            Else : Form4.Show() : Me.Hide()
+            End If
+
+        ElseIf NumericUpDown6.Value = 4 Then
+            If TextBox1.Text = "" Or NumericUpDown1.Value = 0 Or ComboBox1.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox11.SelectedItem = "" Or TextBox2.Text = "" Or NumericUpDown2.Value = 0 Or ComboBox2.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox12.SelectedItem = "" Or TextBox3.Text = "" Or NumericUpDown3.Value = 0 Or ComboBox3.SelectedItem = "" Or ComboBox8.SelectedItem = "" Or ComboBox13.SelectedItem = "" Or TextBox4.Text = "" Or NumericUpDown4.Value = 0 Or ComboBox4.SelectedItem = "" Or ComboBox9.SelectedItem = "" Or ComboBox14.SelectedItem = "" Then
+                MsgBox("PLEASE ENTER ALL THE DETAILS CORRECTLY.", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown1.Value > 11 And ComboBox1.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown1.Value = 0
+                ComboBox1.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown2.Value > 11 And ComboBox2.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown2.Value = 0
+                ComboBox2.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown3.Value > 11 And ComboBox3.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown3.Value = 0
+                ComboBox3.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown4.Value > 11 And ComboBox4.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown4.Value = 0
+                ComboBox4.Text = ""
+            ElseIf ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" Then
+                MsgBox("Number of child without berth option must be equal to number of passengers with berth", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf NumericUpDown1.Value < 5 And NumericUpDown2.Value < 5 And NumericUpDown3.Value < 5 And NumericUpDown4.Value < 5 Then
+                MsgBox("Ticket(s) Not To Be Issued!", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            Else : Form4.Show() : Me.Hide()
+            End If
+
+        ElseIf NumericUpDown6.Value = 5 Then
+            If TextBox1.Text = "" Or NumericUpDown1.Value = 0 Or ComboBox1.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox11.SelectedItem = "" Or TextBox2.Text = "" Or NumericUpDown2.Value = 0 Or ComboBox2.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox12.SelectedItem = "" Or TextBox3.Text = "" Or NumericUpDown3.Value = 0 Or ComboBox3.SelectedItem = "" Or ComboBox8.SelectedItem = "" Or ComboBox13.SelectedItem = "" Or TextBox4.Text = "" Or NumericUpDown4.Value = 0 Or ComboBox4.SelectedItem = "" Or ComboBox9.SelectedItem = "" Or ComboBox14.SelectedItem = "" Or TextBox5.Text = "" Or NumericUpDown5.Value = 0 Or ComboBox5.SelectedItem = "" Or ComboBox10.SelectedItem = "" Or ComboBox15.SelectedItem = "" Then
+                MsgBox("PLEASE ENTER ALL THE DETAILS CORRECTLY.", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown1.Value > 11 And ComboBox1.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown1.Value = 0
+                ComboBox1.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown2.Value > 11 And ComboBox2.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown2.Value = 0
+                ComboBox2.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown3.Value > 11 And ComboBox3.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown3.Value = 0
+                ComboBox3.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown4.Value > 11 And ComboBox4.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown4.Value = 0
+                ComboBox4.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown5.Value > 11 And ComboBox5.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown5.Value = 0
+                ComboBox4.Text = ""
+            ElseIf ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" OrElse ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox10.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox10.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox10.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" Then
+                MsgBox("Number of child without berth option must be equal to number of passengers with berth", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf NumericUpDown1.Value < 5 And NumericUpDown2.Value < 5 And NumericUpDown3.Value < 5 And NumericUpDown4.Value < 5 And NumericUpDown5.Value < 5 Then
+                MsgBox("Ticket(s) Not To Be Issued!", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            Else : Form4.Show() : Me.Hide()
+            End If
+
+        ElseIf NumericUpDown6.Value = 6 Then
+            If TextBox1.Text = "" Or NumericUpDown1.Value = 0 Or ComboBox1.SelectedItem = "" Or ComboBox6.SelectedItem = "" Or ComboBox11.SelectedItem = "" Or TextBox2.Text = "" Or NumericUpDown2.Value = 0 Or ComboBox2.SelectedItem = "" Or ComboBox7.SelectedItem = "" Or ComboBox12.SelectedItem = "" Or TextBox3.Text = "" Or NumericUpDown3.Value = 0 Or ComboBox3.SelectedItem = "" Or ComboBox8.SelectedItem = "" Or ComboBox13.SelectedItem = "" Or TextBox4.Text = "" Or NumericUpDown4.Value = 0 Or ComboBox4.SelectedItem = "" Or ComboBox9.SelectedItem = "" Or ComboBox14.SelectedItem = "" Or TextBox5.Text = "" Or NumericUpDown5.Value = 0 Or ComboBox5.SelectedItem = "" Or ComboBox10.SelectedItem = "" Or ComboBox15.SelectedItem = "" Or TextBox12.Text = "" Or NumericUpDown6.Value = 0 Or ComboBox19.SelectedItem = "" Or ComboBox18.SelectedItem = "" Or ComboBox17.SelectedItem = "" Then
+                MsgBox("PLEASE ENTER ALL THE DETAILS CORRECTLY.", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown1.Value > 11 And ComboBox1.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown1.Value = 0
+                ComboBox1.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown2.Value > 11 And ComboBox2.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown2.Value = 0
+                ComboBox2.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown3.Value > 11 And ComboBox3.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown3.Value = 0
+                ComboBox3.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown4.Value > 11 And ComboBox4.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown4.Value = 0
+                ComboBox4.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown5.Value > 11 And ComboBox5.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown5.Value = 0
+                ComboBox4.Text = ""
+            ElseIf Form2.RadioButton3.Checked = True And NumericUpDown7.Value > 11 And ComboBox6.SelectedItem = "MALE" Then
+                MsgBox("For ladies quota, male passenger should not be older than 11 yr", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+                NumericUpDown7.Value = 0
+                ComboBox19.Text = ""
+            ElseIf ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox9.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox8.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox18.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox8.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" OrElse ComboBox8.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox9.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" OrElse ComboBox8.SelectedItem = "No Berth" And ComboBox10.SelectedItem = "No Berth" And ComboBox6.SelectedItem = "No Berth" And ComboBox7.SelectedItem = "No Berth" Then
+                MsgBox("Number of child without berth option must be equal to number of passengers with berth", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            ElseIf NumericUpDown1.Value < 5 And NumericUpDown2.Value < 5 And NumericUpDown3.Value < 5 And NumericUpDown4.Value < 5 And NumericUpDown5.Value < 5 And NumericUpDown7.Value < 5 Then
+                MsgBox("Ticket(s) Not To Be Issued!", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+            Else : Form4.Show() : Me.Hide()
+            End If
+        End If
+    End Sub
+
+    Private Sub PASSENGER_ValueChanged(ByVal sender As Object, ByVal e As EventArgs) Handles NumericUpDown6.ValueChanged
+        If NumericUpDown6.Value = 1 Then
+            For i As Integer = 13 To 32
+                If i = 17 Then
+                    i += 15
+                End If
+                Dim lbl = Controls("Label" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 2 To 12
+                If i = 6 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("TextBox" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 2 To 7
+                If i = 6 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("NumericUpDown" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 2 To 19
+                If i = 6 Or i = 11 Or i = 16 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("ComboBox" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+
+        ElseIf NumericUpDown6.Value = 2 Then
+            Label13.Show()
+            TextBox2.Show()
+            TextBox7.Show()
+            ComboBox2.Show()
+            ComboBox7.Show()
+            ComboBox12.Show()
+            NumericUpDown2.Show()
+            For i As Integer = 14 To 32
+                If i = 17 Then
+                    i += 15
+                End If
+                Dim lbl = Controls("Label" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 3 To 12
+                If i = 6 Then
+                    i += 2
+                End If
+                Dim lbl = Controls("TextBox" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 3 To 7
+                If i = 6 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("NumericUpDown" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 3 To 19
+                If i = 6 Or i = 11 Then
+                    i += 2
+                End If
+                If i = 16 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("ComboBox" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+
+        ElseIf NumericUpDown6.Value = 3 Then
+            Label14.Show()
+            TextBox3.Show()
+            TextBox8.Show()
+            ComboBox3.Show()
+            ComboBox8.Show()
+            ComboBox13.Show()
+            NumericUpDown3.Show()
+            For i As Integer = 15 To 32
+                If i = 17 Then
+                    i += 15
+                End If
+                Dim lbl = Controls("Label" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 4 To 11
+                If i = 6 Then
+                    i += 3
+                End If
+                Dim lbl = Controls("TextBox" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 4 To 7
+                If i = 6 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("NumericUpDown" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+            For i As Integer = 4 To 19
+                If i = 6 Or i = 11 Then
+                    i += 3
+                End If
+                If i = 16 Then
+                    i += 1
+                End If
+                Dim lbl = Controls("ComboBox" & i.ToString())
+                If lbl IsNot Nothing Then
+                    lbl.Hide()
+                End If
+            Next
+
+        ElseIf NumericUpDown6.Value = 4 Then
+            Label15.Show()
+            TextBox4.Show()
+            TextBox9.Show()
+            ComboBox4.Show()
+            ComboBox9.Show()
+            ComboBox14.Show()
+            NumericUpDown4.Show()
+            Label16.Hide()
+            TextBox5.Hide()
+            TextBox10.Hide()
+            ComboBox5.Hide()
+            ComboBox10.Hide()
+            ComboBox15.Hide()
+            NumericUpDown5.Hide()
+            TextBox12.Hide()
+            TextBox11.Hide()
+            ComboBox19.Hide()
+            ComboBox18.Hide()
+            ComboBox17.Hide()
+            NumericUpDown7.Hide()
+
+        ElseIf NumericUpDown6.Value = 5 Then
+            Label16.Show()
+            TextBox5.Show()
+            TextBox10.Show()
+            ComboBox5.Show()
+            ComboBox10.Show()
+            ComboBox15.Show()
+            NumericUpDown5.Show()
+            Label32.Hide()
+            TextBox12.Hide()
+            TextBox11.Hide()
+            ComboBox19.Hide()
+            ComboBox18.Hide()
+            ComboBox17.Hide()
+            NumericUpDown7.Hide()
+
+        ElseIf NumericUpDown6.Value = 6 Then
+            Label32.Show()
+            TextBox12.Show()
+            TextBox11.Show()
+            ComboBox19.Show()
+            ComboBox18.Show()
+            ComboBox17.Show()
+            NumericUpDown7.Show()
+        End If
+    End Sub
+
+    Private Sub RESET_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button2.Click
+        For Each ctl In Controls
+            If TypeOf ctl Is NumericUpDown Then ctl.Text = ""
+            If TypeOf ctl Is TextBox Then ctl.Text = ""
+            If TypeOf ctl Is ComboBox Then ctl.SelectedIndex = -1
+        Next ctl
+        NumericUpDown6.Text = 1
+    End Sub
+    Private Sub RETURN_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button3.Click
+        Me.Hide()
+        Form2.Show()
+    End Sub
+    Private Sub CANCEL_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button4.Click
+        Dim i As Integer = MsgBox("ARE YOU SURE...?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2 + MsgBoxStyle.ApplicationModal, "CANCEL")
+        If i = MsgBoxResult.Yes Then
+            Me.Close()
+            Form2.Close()
+            Form1.Show()
+        End If
+    End Sub
+
+    Private Sub NumericUpDown1_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown1.ValueChanged
+        If NumericUpDown1.Value < 5 Then
+            If Not ComboBox6.Items.Contains("No Berth Alotted") Then ComboBox6.Items.Add("No Berth Alotted")
+            ComboBox6.SelectedItem = "No Berth Alotted":ComboBox6.Enabled = False
+            TextBox6.Text = "CHILD (TICKET NOT NEEDED)"
+        ElseIf NumericUpDown1.Value >= 5 And NumericUpDown1.Value <= 11 Then
+            ComboBox6.Enabled = True
+            If Not ComboBox6.Items.Contains("No Berth") Then ComboBox6.Items.Add("No Berth")
+        ComboBox6.Items.Remove("No Berth Alotted")
+        ComboBox6.SelectedItem = "No Berth"
+        TextBox6.Text = "CHILD (HALF THE ADULT FARE)"
+        End If
+        If Form2.RadioButton2.Checked = False Then
+            If NumericUpDown1.Value > 11 And NumericUpDown1.Value < 60 Then
+                ComboBox6.Enabled = True
+                ComboBox6.Items.Remove("No Berth Alotted")
+                ComboBox6.Items.Remove("No Berth")
+                TextBox6.Text = "ADULT (FULL FARE)"
+            ElseIf NumericUpDown1.Value >= 60 Then
+                ComboBox6.Enabled = True
+                ComboBox6.Items.Remove("No Berth Alotted")
+                ComboBox6.Items.Remove("No Berth")
+                TextBox6.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)"
+            End If
+        ElseIf NumericUpDown1.Value > 11 Then
+            ComboBox6.Enabled = True
+            ComboBox6.Items.Remove("No Berth Alotted")
+            ComboBox6.Items.Remove("No Berth")
+            TextBox6.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)"
+        End If
+    End Sub
+    Private Sub NumericUpDown2_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown2.ValueChanged
+        If NumericUpDown2.Value < 5 Then
+            If Not ComboBox7.Items.Contains("No Berth Alotted") Then
+                ComboBox7.Items.Add("No Berth Alotted")
+            End If
+            ComboBox7.SelectedItem = "No Berth Alotted"
+            ComboBox7.Enabled = False
+            TextBox7.Text = "CHILD (TICKET NOT NEEDED)"
+        ElseIf NumericUpDown2.Value >= 5 And NumericUpDown2.Value <= 11 Then
+            ComboBox7.Enabled = True
+            If Not ComboBox7.Items.Contains("No Berth") Then
+                ComboBox7.Items.Add("No Berth")
+            End If
+            ComboBox7.Items.Remove("No Berth Alotted")
+            ComboBox7.SelectedItem = "No Berth"
+            TextBox7.Text = "CHILD (HALF THE ADULT FARE)"
+        End If
+        If Form2.RadioButton2.Checked = False Then
+            If NumericUpDown2.Value > 11 And NumericUpDown2.Value < 60 Then
+                ComboBox7.Enabled = True
+                ComboBox7.Items.Remove("No Berth Alotted")
+                ComboBox7.Items.Remove("No Berth")
+                TextBox7.Text = "ADULT (FULL FARE)"
+            ElseIf NumericUpDown2.Value >= 60 Then
+                ComboBox7.Enabled = True
+                ComboBox7.Items.Remove("No Berth Alotted")
+                ComboBox7.Items.Remove("No Berth")
+                TextBox7.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)"
+            End If
+        ElseIf NumericUpDown2.Value > 11 Then
+            ComboBox7.Enabled = True
+            ComboBox7.Items.Remove("No Berth Alotted")
+            ComboBox7.Items.Remove("No Berth")
+            TextBox7.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)"
+        End If
+    End Sub
+    Private Sub NumericUpDown3_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown3.ValueChanged
+        If NumericUpDown3.Value < 5 Then
+            If Not ComboBox8.Items.Contains("No Berth Alotted") Then
+                ComboBox8.Items.Add("No Berth Alotted")
+            End If
+            ComboBox8.SelectedItem = "No Berth Alotted"
+            ComboBox8.Enabled = False
+            TextBox8.Text = "CHILD (TICKET NOT NEEDED)"
+        ElseIf NumericUpDown3.Value >= 5 And NumericUpDown3.Value <= 11 Then
+            ComboBox8.Enabled = True
+            If Not ComboBox8.Items.Contains("No Berth") Then
+                ComboBox8.Items.Add("No Berth")
+            End If
+            ComboBox8.Items.Remove("No Berth Alotted")
+            ComboBox8.SelectedItem = "No Berth"
+            TextBox8.Text = "CHILD (HALF THE ADULT FARE)"
+        End If
+        If Form2.RadioButton2.Checked = False Then
+            If NumericUpDown3.Value > 11 And NumericUpDown3.Value < 60 Then
+                ComboBox8.Enabled = True
+                ComboBox8.Items.Remove("No Berth Alotted")
+                ComboBox8.Items.Remove("No Berth")
+                TextBox8.Text = "ADULT (FULL FARE)"
+            ElseIf NumericUpDown3.Value >= 60 Then
+                ComboBox8.Enabled = True
+                ComboBox8.Items.Remove("No Berth Alotted")
+                ComboBox8.Items.Remove("No Berth")
+                TextBox8.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)"
+            End If
+        ElseIf NumericUpDown3.Value > 11 Then
+            ComboBox8.Enabled = True
+            ComboBox8.Items.Remove("No Berth Alotted")
+            ComboBox8.Items.Remove("No Berth")
+            TextBox8.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)"
+        End If
+    End Sub
+    Private Sub NumericUpDown4_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown4.ValueChanged
+        If NumericUpDown4.Value < 5 Then
+            ComboBox9.Enabled = False
+            If Not ComboBox9.Items.Contains("No Berth Alotted") Then
+                ComboBox9.Items.Add("No Berth Alotted")
+            End If
+            ComboBox9.SelectedItem = "No Berth Alotted"
+            TextBox9.Text = "CHILD (TICKET NOT NEEDED)"
+        ElseIf NumericUpDown4.Value >= 5 And NumericUpDown4.Value <= 11 Then
+            ComboBox9.Enabled = True
+            If Not ComboBox9.Items.Contains("No Berth") Then
+                ComboBox9.Items.Add("No Berth")
+            End If
+            ComboBox9.Items.Remove("No Berth Alotted")
+            ComboBox9.SelectedItem = "No Berth"
+            TextBox9.Text = "CHILD (HALF THE ADULT FARE)"
+        End If
+        If Form2.RadioButton2.Checked = False Then
+            If NumericUpDown4.Value > 11 And NumericUpDown4.Value < 60 Then
+                ComboBox9.Enabled = True
+                ComboBox9.Items.Remove("No Berth Alotted")
+                ComboBox9.Items.Remove("No Berth")
+                TextBox9.Text = "ADULT (FULL FARE)"
+            ElseIf NumericUpDown4.Value >= 60 Then
+                ComboBox9.Enabled = True
+                ComboBox9.Items.Remove("No Berth Alotted")
+                ComboBox9.Items.Remove("No Berth")
+                TextBox9.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)"
+            End If
+        ElseIf NumericUpDown4.Value > 11 Then
+            ComboBox9.Enabled = True
+            ComboBox9.Items.Remove("No Berth Alotted")
+            ComboBox9.Items.Remove("No Berth")
+            TextBox9.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)"
+        End If
+    End Sub
+    Private Sub NumericUpDown5_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown5.ValueChanged
+        If NumericUpDown5.Value < 5 Then
+            If Not ComboBox10.Items.Contains("No Berth Alotted") Then
+                ComboBox10.Items.Add("No Berth Alotted")
+            End If
+            ComboBox10.SelectedItem = "No Berth Alotted"
+            ComboBox10.Enabled = False
+            TextBox10.Text = "CHILD (TICKET NOT NEEDED)"
+        ElseIf NumericUpDown5.Value >= 5 And NumericUpDown5.Value <= 11 Then
+            ComboBox10.Enabled = True
+            If Not ComboBox10.Items.Contains("No Berth") Then
+                ComboBox10.Items.Add("No Berth")
+            End If
+            ComboBox10.Items.Remove("No Berth Alotted")
+            ComboBox10.SelectedItem = "No Berth"
+            TextBox10.Text = "CHILD (HALF THE ADULT FARE)"
+        End If
+        If Form2.RadioButton2.Checked = False Then
+            If NumericUpDown5.Value > 11 And NumericUpDown5.Value < 60 Then
+                ComboBox10.Enabled = True
+                ComboBox10.Items.Remove("No Berth Alotted")
+                ComboBox10.Items.Remove("No Berth")
+                TextBox10.Text = "ADULT (FULL FARE)"
+            ElseIf NumericUpDown5.Value >= 60 Then
+                ComboBox10.Enabled = True
+                ComboBox10.Items.Remove("No Berth Alotted")
+                ComboBox10.Items.Remove("No Berth")
+                TextBox10.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)"
+            End If
+        ElseIf NumericUpDown5.Value > 11 Then
+            ComboBox10.Enabled = True
+            ComboBox10.Items.Remove("No Berth Alotted")
+            ComboBox10.Items.Remove("No Berth")
+            TextBox10.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)"
+        End If
+    End Sub
+    Private Sub NumericUpDown7_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericUpDown7.ValueChanged
+        If NumericUpDown7.Value < 5 Then
+            If Not ComboBox18.Items.Contains("No Berth Alotted") Then
+                ComboBox18.Items.Add("No Berth Alotted")
+            End If
+            ComboBox18.SelectedItem = "No Berth Alotted"
+            ComboBox18.Enabled = False
+            TextBox11.Text = "CHILD (TICKET NOT NEEDED)"
+        ElseIf NumericUpDown7.Value >= 5 And NumericUpDown7.Value < 11 Then
+            ComboBox18.Enabled = True
+            If Not ComboBox18.Items.Contains("No Berth") Then
+                ComboBox18.Items.Add("No Berth")
+            End If
+            ComboBox18.Items.Remove("No Berth Alotted")
+            ComboBox18.SelectedItem = "No Berth"
+            TextBox11.Text = "CHILD (HALF THE ADULT FARE)"
+        End If
+        If Form2.RadioButton2.Checked = False Then
+            If NumericUpDown7.Value > 11 And NumericUpDown7.Value < 60 Then
+                ComboBox18.Enabled = True
+                ComboBox18.Items.Remove("No Berth Alotted")
+                ComboBox18.Items.Remove("No Berth")
+                TextBox11.Text = "ADULT (FULL FARE)"
+            ElseIf NumericUpDown7.Value >= 60 Then
+                ComboBox18.Enabled = True
+                ComboBox18.Items.Remove("No Berth Alotted")
+                ComboBox18.Items.Remove("No Berth")
+                TextBox11.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)"
+            End If
+        ElseIf NumericUpDown7.Value > 11 Then
+            ComboBox18.Enabled = True
+            ComboBox18.Items.Remove("No Berth Alotted")
+            ComboBox18.Items.Remove("No Berth")
+            TextBox11.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)"
+        End If
+    End Sub
+
+    Private Sub BERTH_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ComboBox6.SelectedIndexChanged, ComboBox7.SelectedIndexChanged, ComboBox8.SelectedIndexChanged, ComboBox9.SelectedIndexChanged, ComboBox10.SelectedIndexChanged, ComboBox18.SelectedIndexChanged
+        If NumericUpDown1.Value >= 5 And NumericUpDown1.Value <= 11 Then TextBox6.Text = "Full fare will be charged As Berth is opted for child"
+        If ComboBox6.SelectedItem = "No Berth" Then TextBox6.Text = "CHILD (HALF THE ADULT FARE)"
+        If NumericUpDown2.Value >= 5 And NumericUpDown2.Value <= 11 Then TextBox7.Text = "Full fare will be charged As Berth is opted for child"
+        If ComboBox7.SelectedItem = "No Berth" Then TextBox7.Text = "CHILD (HALF THE ADULT FARE)"
+        If NumericUpDown3.Value >= 5 And NumericUpDown3.Value <= 11 Then TextBox8.Text = "Full fare will be charged As Berth is opted for child"
+        If ComboBox8.SelectedItem = "No Berth" Then TextBox8.Text = "CHILD (HALF THE ADULT FARE)"
+        If NumericUpDown4.Value >= 5 And NumericUpDown4.Value <= 11 Then TextBox9.Text = "Full fare will be charged As Berth is opted for child"
+        If ComboBox9.SelectedItem = "No Berth" Then TextBox9.Text = "CHILD (HALF THE ADULT FARE)"
+        If NumericUpDown5.Value >= 5 And NumericUpDown5.Value <= 11 Then TextBox10.Text = "Full fare will be charged As Berth is opted for child"
+        If ComboBox10.SelectedItem = "No Berth" Then TextBox10.Text = "CHILD (HALF THE ADULT FARE)"
+        If NumericUpDown7.Value >= 5 And NumericUpDown7.Value <= 11 Then TextBox11.Text = "Full fare will be charged As Berth is opted for child"
+        If ComboBox18.SelectedItem = "No Berth" Then TextBox11.Text = "CHILD (HALF THE ADULT FARE)"
+    End Sub
+
+    Private Sub NAME_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.TextChanged, TextBox2.TextChanged, TextBox3.TextChanged, TextBox4.TextChanged, TextBox5.TextChanged, TextBox12.TextChanged
+        Dim allowed As String = ("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        For Each c As Char In TextBox1.Text
+            If allowed.Contains(c) = False Then
+                MsgBox("Enter Passenger name without Special Characters and Numbers", MsgBoxStyle.Critical, "INVALID ENTRY")
+                TextBox1.Text = TextBox1.Text.Remove(TextBox1.SelectionStart - 1, 1)
+                TextBox1.Select(TextBox1.Text.Count, 0)
+            End If
+        Next
+        For Each c As Char In TextBox2.Text
+            If allowed.Contains(c) = False Then
+                MsgBox("Enter Passenger name without Special Characters and Numbers", MsgBoxStyle.Critical, "INVALID ENTRY")
+                TextBox2.Text = TextBox2.Text.Remove(TextBox2.SelectionStart - 1, 1)
+                TextBox2.Select(TextBox2.Text.Count, 0)
+            End If
+        Next
+        For Each c As Char In TextBox3.Text
+            If allowed.Contains(c) = False Then
+                MsgBox("Enter Passenger name without Special Characters and Numbers", MsgBoxStyle.Critical, "INVALID ENTRY")
+                TextBox3.Text = TextBox3.Text.Remove(TextBox3.SelectionStart - 1, 1)
+                TextBox3.Select(TextBox3.Text.Count, 0)
+            End If
+        Next
+        For Each c As Char In TextBox4.Text
+            If allowed.Contains(c) = False Then
+                MsgBox("Enter Passenger name without Special Characters and Numbers", MsgBoxStyle.Critical, "INVALID ENTRY")
+                TextBox4.Text = TextBox4.Text.Remove(TextBox4.SelectionStart - 1, 1)
+                TextBox4.Select(TextBox4.Text.Count, 0)
+            End If
+        Next
+        For Each c As Char In TextBox5.Text
+            If allowed.Contains(c) = False Then
+                MsgBox("Enter Passenger name without Special Characters and Numbers", MsgBoxStyle.Critical, "INVALID ENTRY")
+                TextBox5.Text = TextBox5.Text.Remove(TextBox5.SelectionStart - 1, 1)
+                TextBox5.Select(TextBox5.Text.Count, 0)
+            End If
+        Next
+        For Each c As Char In TextBox12.Text
+            If allowed.Contains(c) = False Then
+                MsgBox("Enter Passenger name without Special Characters and Numbers", MsgBoxStyle.Critical, "INVALID ENTRY")
+                TextBox12.Text = TextBox12.Text.Remove(TextBox12.SelectionStart - 1, 1)
+                TextBox12.Select(TextBox12.Text.Count, 0)
+            End If
+        Next
+        Button1.Show()
+    End Sub
+
+    Private Sub NAME_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox1.Leave, TextBox2.Leave, TextBox3.Leave, TextBox4.Leave, TextBox5.Leave, TextBox12.Leave
+        If TextBox1.TextLength > 0 And TextBox1.TextLength < 3 Then
+            TextBox1.Clear()
+            Button1.Hide()
+            MsgBox("Name length should be between 3 and 15", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+        End If
+        If TextBox2.TextLength > 0 And TextBox2.TextLength < 3 Then
+            TextBox2.Clear()
+            Button1.Hide()
+            MsgBox("Name length should be between 3 and 15", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+        End If
+        If TextBox3.TextLength > 0 And TextBox3.TextLength < 3 Then
+            TextBox3.Clear()
+            Button1.Hide()
+            MsgBox("Name length should be between 3 and 15", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+        End If
+        If TextBox4.TextLength > 0 And TextBox4.TextLength < 3 Then
+            TextBox4.Clear()
+            Button1.Hide()
+            MsgBox("Name length should be between 3 and 15", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+        End If
+        If TextBox5.TextLength > 0 And TextBox5.TextLength < 3 Then
+            TextBox5.Clear()
+            Button1.Hide()
+            MsgBox("Name length should be between 3 and 15", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+        End If
+        If TextBox12.TextLength > 0 And TextBox12.TextLength < 3 Then
+            TextBox12.Clear()
+            Button1.Hide()
+            MsgBox("Name length should be between 3 and 15", MsgBoxStyle.Exclamation, "PASSENGER DETAILS")
+        End If
+    End Sub
+
+    Private Sub Label21_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label21.Click
+        MsgBox("TRAIN SCHEDULE CURRENTLY NOT AVAILABLE" + vbNewLine + "SORRY FOR THE INCONVENIENCE", MsgBoxStyle.Information, "TRAIN DETAILS")
+    End Sub
+    Private Sub Label28_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label28.Click
+        MsgBox("Berth preference does not guarantee allotment of preferred berth type." + vbNewLine +
+"If you need assured Lower Berths or assured compact accommodation (in same coach), please select one of the options." + vbNewLine +
+"If 'No Preference' is selected, the berths will be allotted based on the system logic, depending on availability at that point of time." + vbNewLine +
+"This choice shall not be applicable in case confirmed accommodation is not available in the train.", MsgBoxStyle.Information, "BERTH PREFERENCE")
+    End Sub
+End Class
+Imports System.Data.SqlClient
+Public Class Form4
+    Public con As SqlConnection = New SqlConnection("Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; Integrated Security = True")
+    Private Sub Form4_Load(ByVal sender As Object, ByVal e As EventArgs) Handles MyBase.Load
+        If Not Form2.type = 0 Then
+            Me.Text = "TICKET DETAILS"
+            Button1.Hide()
+            If Form2.type = 1 Then
+                Button2.Location = New Point(731, 694)
+                Button7.Hide()
+            End If
+            Button3.Text = "BOOK NEW"
+            Button4.Text = "CLOSE"
+            If Form2.type = 2 Or Form2.type = 3 Then
+                Button5.Hide()
+                Button7.Show()
+            End If
+            Label85.Hide()
+            Label86.Hide()
+            If Form2.type = 3 Then
+                Label84.Text = "CANCELLED"
+                Label84.ForeColor = Color.Red
+                Label85.Show()
+                Label86.Show()
+            End If
+            Dim da As SqlDataAdapter = New SqlDataAdapter("select * from TRAINS where TRAIN_NUMBER = " + Label57.Text + "", con)
+            Dim ds As DataSet = New DataSet()
+            da.Fill(ds, "TRAINS")
+            Label1.Text = ds.Tables(0).Rows(0).Item(1)
+            Label3.Text = ds.Tables(0).Rows(0).Item(2)
+            Label59.Text = ds.Tables(0).Rows(0).Item(3)
+            Label4.Text = ds.Tables(0).Rows(0).Item(4)
+            Label61.Text = ds.Tables(0).Rows(0).Item(5)
+            Label72.Text = ds.Tables(0).Rows(0).Item(6) & "/- Rs."
+            Dim dd As SqlDataAdapter = New SqlDataAdapter("select * from HISTORY where PNR_NUM = " + Label82.Text + "", con)
+            Dim dt As DataSet = New DataSet()
+            dd.Fill(dt, "HISTORY")
+            Label71.Text = dt.Tables(0).Rows(0).Item(5)
+            Label10.Text = dt.Tables(0).Rows(0).Item(6)
+            Label63.Text = dt.Tables(0).Rows(0).Item(7)
+            Label65.Text = dt.Tables(0).Rows(0).Item(8)
+            Label86.Text = dt.Tables(0).Rows(0).Item(9)
+
+            Dim n, a, g, b, t, h, v, u As Integer
+            v = Val(Label10.Text) - 1 : n = 18 : a = 30 : g = 36 : b = 42 : t = 48 : h = 24 : u = 88
+            For z As Integer = 0 To v
+                Dim nam = Controls("Label" & n) : Dim age = Controls("Label" & a):Dim gen = Controls("Label" & g):Dim ber = Controls("Label" & b):Dim nat = Controls("Label" & t):Dim cha = Controls("Label" & h):Dim sea = Controls("Label" & u)
+                Dim de As SqlDataAdapter = New SqlDataAdapter("select * from DETAILS where PNR_NO = " + Label82.Text + "", con)
+                Dim dset As DataSet = New DataSet() : de.Fill(dset, "DETAILS")
+                nam.Text = dset.Tables(0).Rows(z).Item(1)
+                age.Text = dset.Tables(0).Rows(z).Item(2)
+                gen.Text = dset.Tables(0).Rows(z).Item(3)
+                ber.Text = dset.Tables(0).Rows(z).Item(4)
+                nat.Text = dset.Tables(0).Rows(z).Item(5)
+                cha.Text = dset.Tables(0).Rows(z).Item(6)
+                sea.Text = dset.Tables(0).Rows(z).Item(7)
+                n += 1 : a += 1 : g += 1 : b += 1 : t += 1 : h += 1 : u += 1 : Next
+        ElseIf Form2.type = 0 Then
+            For c As Integer = 80 To 93
+                Dim lbl = Controls("Label" & c)
+                lbl.Hide()
+            Next
+            Button5.Hide()
+            Button6.Hide()
+            Button7.Hide()
+            Dim j As Integer, i As Integer = 1, k As Integer = 1, l As Integer = 1
+            For j = 18 To 29 : If j = 23 Then j += 1
+                Dim txt = Controls("Label" & j) : txt.Text = Form3.pn(i) : i += 1 : Next
+            For j = 30 To 35 : If k = 6 Then k += 1
+                Dim txt = Controls("Label" & j) : txt.Text = Form3.pa(k) : k += 1 : Next
+            For j = 36 To 53 : If j = 41 Or j = 47 Then j += 1 : If l = 16 Then l += 1
+                Dim txt = Controls("Label" & j) : txt.Text = Form3.pg(l) : l += 1 : Next
+            Label1.Text = Form3.Label1.Text : Label2.Text = Form3.Label2.Text
+            Label3.Text = Form3.Label3.Text
+            Label4.Text = Form3.Label4.Text
+            Label10.Text = Form3.NumericUpDown6.Value
+            Label23.Text = Form3.TextBox12.Text
+            Label41.Text = Form3.ComboBox19.SelectedItem
+            Label47.Text = Form3.ComboBox18.SelectedItem
+            Label57.Text = Form3.Label21.Text
+            Label59.Text = Form3.Label19.Text
+            Label61.Text = Form3.Label20.Text
+            Label63.Text = Form3.Label34.Text
+            Label65.Text = Form2.ComboBox16.SelectedItem
+            Label72.Text = Form3.Label23.Text
+            Dim co As String = Nothing
+            If Label65.Text = "Sleeper Class" Then co = "S"
+            If Label65.Text = "I-Class AC" Then co = "A"
+            If Label65.Text = "II-Class AC" Then co = "B"
+            If Label65.Text = "III-Class AC" Then co = "C"
+            Dim seat As Integer = Val(Form2.sa) : For m = 88 To 93
+                Dim txt = Controls("Label" & m) : txt.Text = co & seat : seat -= 1 : Next : End If
+
+        Dim d As Integer = Val(Label10.Text), p, s As Integer
+        For Each ctl In Controls : If TypeOf ctl Is Label Then
+                If ctl.Text = "CHILD (TICKET NOT NEEDED)" Then d -= 1
+                If ctl.Text = "CHILD (HALF THE ADULT FARE)" Then p += Val(Label72.Text) / 2
+                If ctl.Text = "SENIOR CITIZEN (CONCESSION AVAILABLE)" Or ctl.Text = "HANDICAP/ESCORT (CONCESSION AVAILABLE)" Then s = Val(Label72.Text) * 0.1
+            End If : Next
+
+        If Label65.Text = "Sleeper Class" Then Label66.Text = "0"
+        If Label65.Text = "I-Class AC" Then Label66.Text = Val(Label72.Text) * 0.9 & "/-Rs."
+        If Label65.Text = "II-Class AC" Then Label66.Text = Val(Label72.Text) * 0.7 & "/-Rs."
+        If Label65.Text = "III-Class AC" Then Label66.Text = Val(Label72.Text) * 0.5 & "/-Rs."
+        Label70.Text = Val(Label72.Text) * 0.09 & "/-Rs."
+        Label71.Text = (Val(Label72.Text) + Val(Label66.Text) + Val(Label70.Text) - (p) - (s)) * d & "/- Rs."
+
+        If Val(Label10.Text) = 1 Then
+            Label13.Hide()
+            Label14.Hide()
+            Label67.Hide()
+            Label68.Hide()
+            Label69.Hide()
+            For c As Integer = 19 To 93
+                If c = 30 Or c = 36 Or c = 42 Or c = 48 Or c = 24 Then
+                    c += 1
+                End If
+                If c = 54 Then
+                    c += 35
+                End If
+                Dim lbl = Controls("Label" & c)
+                lbl.Hide()
+            Next
+        ElseIf Val(Label10.Text) = 2 Then
+            Label14.Hide()
+            Label67.Hide()
+            Label68.Hide()
+            Label69.Hide()
+            For c As Integer = 20 To 93
+                If c = 30 Or c = 36 Or c = 42 Or c = 48 Or c = 24 Then
+                    c += 2
+                End If
+                If c = 54 Then
+                    c += 36
+                End If
+                Dim lbl = Controls("Label" & c)
+                lbl.Hide()
+            Next
+        ElseIf Val(Label10.Text) = 3 Then
+            Label67.Hide()
+            Label68.Hide()
+            Label69.Hide()
+            For c As Integer = 21 To 93
+                If c = 30 Or c = 36 Or c = 42 Or c = 48 Or c = 24 Then
+                    c += 3
+                End If
+                If c = 54 Then
+                    c += 37
+                End If
+                Dim lbl = Controls("Label" & c)
+                lbl.Hide()
+            Next
+        ElseIf Val(Label10.Text) = 4 Then
+            Label68.Hide()
+            Label69.Hide()
+            For c As Integer = 22 To 93
+                If c = 30 Or c = 36 Or c = 42 Or c = 48 Or c = 24 Then
+                    c += 4
+                End If
+                If c = 54 Then
+                    c += 38
+                End If
+                Dim lbl = Controls("Label" & c)
+                lbl.Hide()
+            Next
+        ElseIf Val(Label10.Text) = 5 Then
+            Label69.Hide()
+            For c As Integer = 23 To 93
+                If c = 30 Or c = 36 Or c = 42 Or c = 48 Or c = 24 Then
+                    c += 5
+                End If
+                If c = 54 Then
+                    c += 39
+                End If
+                Dim lbl = Controls("Label" & c)
+                lbl.Hide()
+            Next
+        End If
+        con.Close()
+    End Sub
+    Private Sub PAY(ByVal sender As Object, ByVal e As EventArgs) Handles Button1.Click
+        con.Open()
+        Dim com As SqlCommand = New SqlCommand("INSERT INTO HISTORY VALUES ('" + Label57.Text + "','" + Label2.Text + "','" + DateAndTime.Now + "','CONFIRMED','" + Label71.Text + "','" + Label10.Text + "','" + Label63.Text + "','" + Label65.Text + "','" + Label86.Text + "')", con)
+        Dim dr = com.ExecuteReader() : dr.Read() : dr.Close()
+        Dim n, a, g, b, t, h, s As Integer
+        n = 18 : a = 30 : g = 36 : b = 42 : t = 48 : h = 24 : s = 88
+        For i As Integer = 1 To Val(Label10.Text)
+            Dim nam = Controls("Label" & n)
+            Dim age = Controls("Label" & a)
+            Dim gen = Controls("Label" & g)
+            Dim ber = Controls("Label" & b)
+            Dim nat = Controls("Label" & t)
+            Dim cha = Controls("Label" & h)
+            Dim sea = Controls("Label" & s)
+            Dim cmd As SqlCommand = New SqlCommand("INSERT INTO DETAILS VALUES ((SELECT TOP 1 PNR_NUM FROM HISTORY ORDER BY PNR_NUM DESC),'" + nam.Text + "','" + age.Text + "','" + gen.Text + "','" + ber.Text + "','" + nat.Text + "','" + cha.Text + "','" + sea.Text + "')", con)
+            Dim rd = cmd.ExecuteReader() : rd.Read() : rd.Close()
+            n += 1 : a += 1 : g += 1 : b += 1 : t += 1 : h += 1 : s += 1 : Next
+        MsgBox("TICKET BOOKED SUCESSFULLY!", MsgBoxStyle.Information, "CONFIRMATION")
+        If MsgBoxResult.Ok Then
+            Button1.Hide()
+            Button2.Hide()
+            Button3.Text = "BOOK NEW"
+            Button4.Text = "CLOSE"
+            Button6.Show()
+            Label80.Show()
+            Label81.Show()
+            Label82.Show()
+            Label83.Show()
+            Label84.Show()
+            Label87.Show()
+            Label88.Show()
+            If Val(Label10.Text) = 2 Then
+                Label89.Show()
+            ElseIf Val(Label10.Text) = 3 Then
+                Label89.Show()
+                Label90.Show()
+            ElseIf Val(Label10.Text) = 4 Then
+                Label89.Show()
+                Label90.Show()
+                Label91.Show()
+            ElseIf Val(Label10.Text) = 5 Then
+                Label89.Show()
+                Label90.Show()
+                Label91.Show()
+                Label92.Show()
+            ElseIf Val(Label10.Text) = 6 Then
+                Label89.Show()
+                Label90.Show()
+                Label91.Show()
+                Label92.Show()
+                Label93.Show()
+            End If
+            Dim cmm As SqlCommand = New SqlCommand("SELECT TOP 1 * FROM HISTORY ORDER BY PNR_NUM DESC", con)
+            Dim r = cmm.ExecuteReader() : r.Read()
+            Label82.Text = r(0).ToString : Label80.Text = r(3).ToString
+            r.Close() : End If : con.Close()
+    End Sub
+    Private Sub CANCEL(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Dim i As Integer = MsgBox("ARE YOU SURE...?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2 + MsgBoxStyle.ApplicationModal, "CANCEL TICKET")
+        If i = MsgBoxResult.Yes Then:Dim r As String
+            r = Val(Label71.Text) - (60 * Val(Label10.Text)) & "/-Rs."
+            con.Open()
+            Dim cnc As SqlCommand = New SqlCommand("UPDATE HISTORY SET TICKET_STATUS='CANCELLED', REFUNDED_AMOUNT='" + r + "' WHERE PNR_NUM=" + Label82.Text + "", con)
+            cnc.ExecuteNonQuery()
+            MsgBox("TICKET CANCELLED SUCESSFULLY.", MsgBoxStyle.Information, "CONFIRMATION")
+            If MsgBoxResult.Ok Then
+                Button2.Hide()
+                Button5.Hide()
+                Label84.ForeColor = Color.Red
+                Label84.Text = "CANCELLED"
+                Label84.Show()
+                Label85.Show()
+                Label86.Show()
+                Form2.Close()
+                Dim cmm As SqlCommand = New SqlCommand("SELECT TOP 1 * FROM HISTORY ORDER BY PNR_NUM DESC", con)
+                Dim c = cmm.ExecuteReader()
+                c.Read()
+                Label82.Text = c(0).ToString
+                Label80.Text = c(3).ToString
+                Label86.Text = c(9).ToString
+                c.Close()
+            End If
+        End If
+        con.Close()
+    End Sub
+    Private Sub PRINT_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
+        PrintForm1.PrintFileName = "D:\TRAIN TICKET " & Label2.Text & ".pdf"
+        PrintForm1.Print(Me, PowerPacks.Printing.PrintForm.PrintOption.ClientAreaOnly)
+        MsgBox("PRINTED TICKET SUCCESSFULLY", MsgBoxStyle.Information, "CONFIRMATION")
+    End Sub
+    Private Sub RETURN_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button2.Click
+        If Form2.type = 0 Then
+            Me.Close()
+            Form3.Show()
+        Else
+            Me.Close()
+            Form2.Show()
+        End If
+    End Sub
+    Private Sub NEW_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button3.Click
+        If Button3.Text = "REPLAN" Then
+            Me.Close()
+            Form2.Close()
+            Form1.Show()
+        Else
+            Me.Close()
+            Form2.Close()
+            Form3.Close()
+            Form1.type = 0
+            Form1.Show()
+        End If
+    End Sub
+    Private Sub CANCEL_Click(ByVal sender As Object, ByVal e As EventArgs) Handles Button4.Click
+        If Button4.Text = "CANCEL" Then
+            Dim i As Integer = MsgBox("ARE YOU SURE...?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2 + MsgBoxStyle.ApplicationModal, "CLOSE")
+            If i = MsgBoxResult.Yes Then
+                Me.Close()
+                Form2.Close()
+                Form3.Close()
+                Form1.type = 0
+                Form1.Show()
+            End If
+        Else
+            Form1.Close()
+        End If
+    End Sub
+    Private Sub Label57_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label57.Click
+        MsgBox("TRAIN SCHEDULE CURRENTLY NOT AVAILABLE" + vbNewLine + "SORRY FOR THE INCONVENIENCE", MsgBoxStyle.Information, "TRAIN DETAILS")
+    End Sub
+    Private Sub Label82_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Label82.Click
+        MsgBox("The ID card will be required during journey." + vbNewLine + "One of the passenger booked on ticket should have any of their Valid Photo Identity Card during train journey in original.", MsgBoxStyle.Information, "ID REQUIRED")
+    End Sub
+    Private Sub DELETE_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
+        If Label2.Text < Today OrElse Label84.Text = "CANCELLED" Then
+            Dim i As Integer = MsgBox("ARE YOU SURE...?", MsgBoxStyle.Exclamation + MsgBoxStyle.YesNo + MsgBoxStyle.DefaultButton2 + MsgBoxStyle.ApplicationModal, "DELETE RECORD")
+            If i = MsgBoxResult.Yes Then : con.Open()
+                Dim com As SqlCommand = New SqlCommand("DELETE FROM HISTORY WHERE PNR_NUM=" + Label82.Text + "", con) : com.ExecuteNonQuery()
+                Dim cmd As SqlCommand = New SqlCommand("DELETE FROM DETAILS WHERE PNR_NO NOT IN (SELECT PNR_NUM FROM HISTORY)", con) : cmd.ExecuteNonQuery()
+                con.Close() : Form2.Close() : Form1.type = 0 : Form1.Show() : Me.Close() : End If
+        Else : MsgBox("ONLY EXPIRED/CANCELLED TICKETS CAN BE DELETED!", MsgBoxStyle.Exclamation, "NOT ALLOWED") : End If
+    End Sub : End Class
