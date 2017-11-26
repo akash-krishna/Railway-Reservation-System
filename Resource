@@ -1,0 +1,202 @@
+12235,Dibrugarh - New Delhi Rajdhani Express,DIBRUGARH,19:25,NEW DELHI,13:55
+12236,New Delhi - Dibrugarh Rajdhani Express,NEW DELHI,9:25,DIBRUGARH,14:55
+12301,Howrah - New Delhi Rajdhani Express,HOWRAH JN,16:55,NEW DELHI,15:55
+12302,New Delhi - Howrah Rajdhani Express,NEW DELHI,16:55,Howrah Junction,16:55
+12305,Howrah - New Delhi Rajdhani Express,HOWRAH JN,14:05,NEW DELHI,17:55
+12306,New Delhi - Howrah Rajdhani Express,NEW DELHI,16:55,HOWRAH JN,18:55
+12309,Rajendra Nagar (Patna) - New Delhi Rajdhani Express,RAJENDRANAGAR T,19:00,NEW DELHI,19:55
+12310,New Delhi - Rajendra Nagar (Patna) Rajdhani Express,NEW DELHI,17:15,RAJENDRANAGAR T,20:55
+12313,Sealdah - New Delhi Rajdhani Express,SEALDAH,16:50,NEW DELHI,21:55
+12314,New Delhi - Sealdah Rajdhani Express,NEW DELHI,16:25,SEALDAH,22:55
+12423,Dibrugarh Town - New Delhi Rajdhani Express,DIBRUGARH TOWN,20:35,NEW DELHI,23:55
+12424,New Delhi - Dibrugarh Town Rajdhani Express,NEW DELHI,16:10,DIBRUGARH TOWN,0:55
+12425,New Delhi - Jammu Tawi Rajdhani Express,NEW DELHI,20:40,JAMMU TAWI,1:55
+12426,Jammu Tawi - New Delhi Rajdhani Express,JAMMU TAWI,19:40,NEW DELHI,2:55
+12431,Thiruvananthapuram Central - Hazrat Nizamuddin Rajdhani Exp.,TRIVANDRUM CNTL,19:15,H NIZAMUDDIN,3:55
+12432,H.Nizamuddin-Trivandrum Central Rajdhani Express,H NIZAMUDDIN,10:55,TRIVANDRUM CNTL,4:55
+12433,Chennai Central - Hazrat Nizamuddin Rajdhani Express,CHENNAI CENTRAL,6:10,H NIZAMUDDIN,5:55
+12434,Hazrat Nizamuddin - Chennai Central Rajdhani Express,H NIZAMUDDIN,15:55,CHENNAI CENTRAL,6:55
+12435,Dibrugarh Town - New Delhi Rajdhani Express,DIBRUGARH TOWN,19:20,NEW DELHI,7:55
+12436,New Delhi - Dibrugarh Town Rajdhani Express,NEW DELHI,9:25,DIBRUGARH TOWN,8:55
+12437,Secunderabad - Hazrat Nizamuddin Rajdhani Express,SECUNDERABAD JN,12:45,H NIZAMUDDIN,9:55
+12438,Hazrat Nizamuddin - Secunderabad Rajdhani Express,H NIZAMUDDIN,15:55,SECUNDERABAD JN,10:55
+12439,Ranchi - New Delhi Rajdhani Express,RANCHI,17:55,NEW DELHI,11:55
+12440,New Delhi - Ranchi Rajdhani Express,NEW DELHI,16:00,RANCHI,12:55
+12441,Bilaspur - New Delhi Rajdhani Express,BILASPUR JN,14:00,NEW DELHI,13:55
+12442,New Delhi - Bilaspur Rajdhani Express,NEW DELHI,15:45,BILASPUR JN,14:55
+12453,Ranchi - New Delhi Rajdhani Express,RANCHI,17:10,	NEW DELHI,15:55
+12454,New Delhi - Ranchi Rajdhani Express,NEW DELHI,16:00,RANCHI,16:55
+12951,Mumbai Central - New Delhi Rajdhani Express,MUMBAI CENTRAL,17:00,NEW DELHI,17:55
+12001,Bhopal Habibganj - New Delhi Shatabdi Express,HABIBGANJ,15:00,NEW DELHI,18:55
+12002,New Delhi - Bhopal Habibganj Shatabdi Express,NEW DELHI,6:00,HABIBGANJ,19:55
+12003,Lucknow Jn - New Delhi Swarn Shatabdi Express,LUCKNOW NE,15:35,NEW DELHI,20:55
+12004,New Delhi - Lucknow Jn Swarn Shatabdi Express,NEW DELHI,6:10,LUCKNOW NE,21:55
+12005,New Delhi - Kalka Shatabdi Express,NEW DELHI,17:15,KALKA,22:55
+12006,Kalka - New Delhi Shatabdi Express,KALKA,6:15,NEW DELHI,23:55
+12007,Chennai Central - Mysuru Jn Shatabdi Express,CHENNAI CENTRAL,6:00,MYSURU JN,0:55
+12008,Mysuru - Chennai Central Shatabdi Express,MYSURU JN,14:15,CHENNAI CENTRAL,1:55
+12009,Mumbai Central-Ahmedabad Shatabdi Express,MUMBAI CENTRAL,6:25,AHMEDABAD JN,2:55
+12010,Ahmedabad - Mumbai Central Shatabdi Express,AHMEDABAD JN,14:40,SHATABDI EXP,3:55
+12011,New Delhi - Kalka Shatabdi Express,NEW DELHI,7:40,KALKA,4:55
+12012,Kalka - New Delhi Shatabdi Express,KALKA,17:45,NEW DELHI,5:55
+12013,New Delhi-Amritsar Shatabdi Express,NEW DELHI,16:30,AMRITSAR JN,6:55
+12014,Amritsar - New Delhi Shatabdi Express,AMRITSAR JN,5:00,NEW DELHI,7:55
+12015,New Delhi - Ajmer Shatabdi Express,NEW DELHI,6:05,AJMER JN,8:55
+12016,Ajmer - New Delhi Shatabdi Express,AJMER JN,15:45,NEW DELHI,9:55
+12017,New Delhi - Dehradun Shatabdi Express,NEW DELHI,6:45,HARIDWAR JN,10:55
+12018,Dehradun - New Delhi Shatabdi Express,DEHRADUN,5:00,NEW DELHI,11:55
+12019,Howrah - Ranchi Shatabdi Express,HOWRAH JN,6:05,RANCHI,12:55
+12020,Ranchi - Howrah Shatabdi Express,RANCHI,13:45,HOWRAH JN,13:55
+12025,Pune-Secunderabad Shatabdi Express,PUNE JN,5:50,SECUNDERABAD JN,14:55
+12026,Secunderabad - Pune Shatabdi Express,SECUNDERABAD JN,14:45,PUNE JN,15:55
+12027,Chennai Central - KSR Bengaluru City Shatabdi Express,CHENNAI CENTRAL,17:30,KSR BENGALURU,16:55
+12028,KSR Bengaluru City - Chennai Central Shatabdi Express,KSR BENGALURU,6:00,CHENNAI CENTRAL,17:55
+12029,New Delhi - Amritsar Swarna Shatabdi Express,NEW DELHI,7:20,AMRITSAR JN,18:55
+12030,Amritsar - New Delhi Swarna Shatabdi Express,AMRITSAR JN,16:50,NEW DELHI,19:55
+12031,New Delhi - Amritsar Shatabdi Express,NEW DELHI,7:20,AMRITSAR JN(ASR),20:55
+12032,Amritsar - New Delhi Shatabdi Express,AMRITSAR JN,16:50,NEW DELHI,21:55
+12033,Kanpur - New Delhi Shatabdi Express,KANPUR CENTRAL,6:00,NEW DELHI,22:55
+12034,New Delhi - Kanpur Shatabdi Express,NEW DELHI,15:50,KANPUR CENTRAL,23:55
+12035,Jaipur - Agra Fort Shatabdi Express,JAIPUR,7:05,AGRA FORT,0:55
+12036,Agra Fort - Jaipur Shatabdi Express,AGRA FORT,17:40,JAIPUR,1:55
+12037,New Delhi - Ludhiana Shatabdi Express,NEW DELHI,7:00,LUDHIANA JN,2:55
+12038,Ludhiana - New Delhi Shatabdi Express,LUDHIANA JN,16:40,NEW DELHI,3:55
+12039,Kathgodam - New Delhi Shatabdi Express,KATHGODAM,15:35,NEW DELHI,4:55
+12040,New Delhi - Kathgodam Shatabdi Express,NEW DELHI,6:00,KATHGODAM,5:55
+12041,Howrah - New Jalpaiguri Shatabdi Express,HOWRAH JN,14:15,NEW JALPAIGURI,6:55
+12042,New Jalpaiguri - Howrah Shatabdi Express,NEW JALPAIGURI,5:30,HOWRAH JN,7:55
+12043,New Delhi - Moga Shatabdi Express,NEW DELHI,7:00,MOGA,8:55
+12044,Moga - New Delhi Shatabdi Express,MOGA,15:00,NEW DELHI,9:55
+12045,New Delhi - Chandigarh Shatabdi Express,NEW DELHI,19:15,CHANDIGARH,10:55
+12046,Chandigarh - New Delhi Shatabdi Express,CHANDIGARH,12:00,NEW DELHI,11:55
+12047,New Delhi-Firozpur Shatabdi Express,NEW DELHI,16:20,FIROZPUR CANT,12:55
+12048,Firozpur - New Delhi Shatabdi Express,FIROZPUR CANT,4:00,NEW DELHI,13:55
+12243,Chennai Central-Coimbatore Shatabdi Express,CHENNAI CENTRAL,7:15,COIMBATORE JN,14:55
+12244,Coimbatore - Chennai Central Shatabdi Express,COIMBATORE JN,15:25,CHENNAI CENTRAL,15:55
+12277,Howrah - Puri Shatabdi Express,HOWRAH JN,14:25,PURI,16:55
+12278,Puri - Howrah Shatabdi Express,PURI,5:45,HOWRAH JN,17:55
+12213,Yeshvantapur - Delhi Sarai Rohilla AC Duronto Express,YESVANTPUR JN,23:40,DELHI S ROHILLA,18:55
+12214,Delhi Sarai Rohilla - Yesvantpur AC Duronto Express,DELHI S ROHILLA,23:00,YESVANTPUR JN,19:55
+12219,Mumbai LTT - Secunderabad AC Duronto Express,LOKMANYATILAK T,23:05,SECUNDERABAD JN,20:55
+12220,Secunderabad - Mumbai LTT AC Duronto Express,SECUNDERABAD JN,23:05,LOKMANYATILAK T,21:55
+12221,Pune - Howrah AC Duronto Express,PUNE JN,15:15,HOWRAH JN,22:55
+12222,Howrah - Pune AC Duronto Express,HOWRAH JN,8:20,PUNE JN,23:55
+12223,Lokmanya Tilak Terminus - Ernakulam Duronto Express,LOKMANYATILAK T,20:50,ERNAKULAM JN,0:55
+12224,Ernakulam Duronto Express - Lokmanya Tilak Terminus,ERNAKULAM JN,21:30,LOKMANYATILAK T,1:55
+12227,Mumbai Central - Indore AC Duronto Express,MUMBAI CENTRAL,23:15,INDORE JN BG,2:55
+12228,Indore - Mumbai Central AC Duronto Express,INDORE JN BG,23:00,MUMBAI CENTRAL,3:55
+12239,Mumbai Central - Jaipur AC Duronto Express,MUMBAI CENTRAL,23:15,JAIPUR,4:55
+12240,Jaipur - Mumbai Central AC Duronto Express,JAIPUR,19:10,MUMBAI CENTRAL,5:55
+12245,Howrah - Yeshvantapur Duronto Express,HOWRAH JN,10:55,YESVANTPUR JN,6:55
+12246,Yesvantpur - Howrah Duronto Express,YESVANTPUR JN,11:15,HOWRAH JN,7:55
+12259,Sealdah - New Delhi Duronto Express,SEALDAH,18:30,NEW DELHI,8:55
+12260,New Delhi - Sealdah AC Duronto Express,NEW DELHI,19:40,SEALDAH,9:55
+12261,Mumbai CST - Howrah AC Duronto Express,MUMBAI CST,17:15,HOWRAH JN,10:55
+12262,Howrah - Mumbai CST AC Duronto Express,HOWRAH JN,8:20,MUMBAI CST,11:55
+12263,Pune - Hazrat Nizamuddin AC Duronto Express,PUNE JN,11:10,H NIZAMUDDIN,12:55
+12264,Hazrat Nizamuddin - Pune AC Duronto Express,H NIZAMUDDIN,10:55,PUNE JN,13:55
+12265,Delhi Sarai Rohilla - Jammu Tawi Duronto Express,DELHI S ROHILLA,22:15,JAMMU TAWI,14:55
+12266,Jammu Tawi - Delhi Sarai Rohilla Duronto Express,JAMMU TAWI,19:20,DELHI S ROHILLA,15:55
+12267,Mumbai Central - Ahmedabad AC Duronto Express,MUMBAI CENTRAL,23:25,AHMEDABAD JN,16:55
+12268,Ahmedabad - Mumbai Central AC Duronto Express,AHMEDABAD JN,23:45,MUMBAI CENTRAL,17:55
+12269,Chennai Central - Hazrat Nizamuddin Duronto Express,CHENNAI CENTRAL,6:40,H NIZAMUDDIN,18:55
+12270,Hazrat Nizamuddin - Chennai Central Duronto Express,H NIZAMUDDIN,15:45,CHENNAI CENTRAL,19:55
+12273,Howrah - New Delhi Duronto Express,HOWRAH JN,12:45,NEW DELHI,20:55
+12274,New Delhi - Howrah Duronto Express,NEW DELHI,12:55,HOWRAH JN,21:55
+12275,Allahabad - New Delhi Duronto Express,ALLAHABAD JN,22:40,NEW DELHI,22:55
+12276,New Delhi - Allahabad Duronto Express,NEW DELHI,22:40,ALLAHABAD JN,23:55
+12281,Bhubaneswar - New Delhi Duronto Express,BHUBANESWAR,8:10,NEW DELHI,0:55
+12282,New Delhi - Bhubaneswar Duronto Express,NEW DELHI,12:55,BHUBANESWAR,1:55
+12283,Ernakulam - Hazrat Nizamuddin Duronto Express,ERNAKULAM JN,23:30,H NIZAMUDDIN,2:55
+12284,Hazrat Nizamuddin - Ernakulam Duronto Express,H NIZAMUDDIN,21:35,ERNAKULAM JN,3:55
+12285,Secunderabad - Hazrat Nizamuddin Duronto Express,SECUNDERABAD JN,13:10,H NIZAMUDDIN,4:55
+12286,Hazrat Nizamuddin - Secunderabad Duronto Express,H NIZAMUDDIN,15:45,SECUNDERABAD JN,5:55
+12289,Mumbai CST - Nagpur Duronto Express,MUMBAI CST,20:15,NAGPUR,6:55
+12290,Nagpur - Mumbai CST Duronto Express,NAGPUR,20:40,MUMBAI CST,7:55
+12293,Mumbai LTT - Allahabad AC Duronto Express,LOKMANYATILAK T,17:25,ALLAHABAD JN,8:55
+12294,Allahabad - Mumbai LTT AC Duronto Express,ALLAHABAD JN,19:30,LOKMANYATILAK T,9:55
+12297,Ahmedabad - Pune AC Duronto Express,AHMEDABAD JN,22:30,PUNE JN,10:55
+12298,Pune - Ahmedabad AC Duronto Express,PUNE JN,21:35,AHMEDABAD JN,11:55
+22201,Sealdah - Puri Duronto Express - Sealdah,SEALDAH,20:00,PURI,12:55
+22202,Puri - Sealdah Duronto Express,PURI,19:45,SEALDAH,13:55
+22203,Visakhapatnam - Secunderabad Duronto Express,VISAKHAPATNAM,19:45,SECUNDERABAD JN,14:55
+22204,Secunderabad - Visakhapatnam AC Duronto Express,SECUNDERABAD JN,20:15,VISAKHAPATNAM,15:55
+22205,Chennai Central - Madurai AC Duronto Express,CHENNAI CENTRAL,22:30,MADURAI JN,16:55
+22206,Madurai - Chennai Central AC Duronto Express,MADURAI JN,22:45,CHENNAI CENTRAL,17:55
+22209,Mumbai Central - New Delhi AC Duronto Express,MUMBAI CENTRAL,23:15,NEW DELHI,18:55
+22210,New Delhi - Mumbai Central AC Duronto Express,NEW DELHI,23:25,MUMBAI CENTRAL,19:55
+22213,Kolkata Shalimar - Patna Duronto Express,SHALIMAR,22:05,PATNA JN,20:55
+22214,Patna - Shalimar Duronto Express,PATNA JN,20:40,SHALIMAR,21:55
+12113,Pune - Nagpur Garib Rath Express,PUNE JN,17:40,NAGPUR,22:55
+12114,Nagpur - Pune Garib Rath Express,NAGPUR,18:35,PUNE JN,23:55
+12187,Jabalpur - Mumbai CST Garib Rath Express,JABALPUR,19:30,MUMBAI CST,0:55
+12188,Mumbai CST - Jabalpur Garib Rath Express,MUMBAI CST,13:30,JABALPUR,1:55
+12201,Mumbai LTT - Kochuveli Garib Rath Express,LOKMANYATILAK T,16:55,KOCHUVELI,2:55
+12202,Kochuveli - Mumbai Lokmanya Tilak (T.) Garib Rath Express,KOCHUVELI,8:45,LOKMANYATILAK T,3:55
+12203,Saharsa - Amritsar Garib Rath Express,SAHARSA JN,14:55,AMRITSAR JN,4:55
+12204,Amritsar - Saharsa Garib Rath Express,AMRITSAR JN,4:10,SAHARSA JN,5:55
+12207,Kathgodam - Jammu Tawi Garib Rath Express,KATHGODAM,18:30,JAMMU TAWI,6:55
+12208,Jammu Tawi - Kathgodam Garib Rath Express,JAMMU TAWI,23:15,KATHGODAM,7:55
+12209,Kanpur-Kathgodam Garib Rath Express,KANPUR CENTRAL,6:15,KATHGODAM,8:55
+12210,Kathgodam-Kanpur Garib Rath Express,KATHGODAM,18:30,KANPUR CENTRAL,9:55
+12211,Muzaffarpur - Anand Vihar Garib Rath Express,MUZAFFARPUR JN,15:15,ANAND VIHAR TRM,10:55
+12212,Anand Vihar - Muzaffarpur Garib Rath Express,ANAND VIHAR TRM,20:55,MUZAFFARPUR JN,11:55
+12215,Delhi Sarai Rohilla - Bandra Terminus Garib Rath Express,DELHI S ROHILLA,9:20,BANDRA TERMINUS,12:55
+12216,Mumbai Bandra (T.) - Delhi Sarai Rohilla Garib Rath Express,BANDRA TERMINUS,12:45,DELHI S ROHILLA,13:55
+12257,Yesvantpur - Kochuveli Garib Rath Express,YESVANTPUR JN,21:00,KOCHUVELI,14:55
+12258,Kochuveli - Yesvantpur Garib Rath Express,KOCHUVELI,17:00,YESVANTPUR JN,15:55
+12359,Kolkata - Patna Garib Rath Express,KOLKATA,20:05,PATNA JN,16:55
+12360,Patna - Kolkata Garib Rath Express,PATNA JN,20:05,KOLKATA,17:55
+12517,Kolkata - Guwahati Garib Rath Express,KOLKATA,21:40,GUWAHATI,18:55
+12518,Guwahati - Kolkata Garib Rath Express,GUWAHATI,21:00,KOLKATA,19:55
+12535,Lucknow - Raipur Garib Rath Express,LUCKNOW NE,14:25,RAIPUR JN,20:55
+12536,Raipur-Lucknow Garib Rath Express,RAIPUR JN,12:20,LUCKNOW NE,21:55
+12569,Jaynagar - Delhi Anand Vihar (T) Garib Rath Express,JAYNAGAR,12:00,ANAND VIHAR TRM,22:55
+12570,Anand Vihar (T) - Jaynagar Garib Rath Express,ANAND VIHAR TRM,16:55,JAYNAGAR,23:55
+12593,Lucknow - Bhopal Garib Rath Express,LUCKNOW NE,22:45,BHOPAL JN,0:55
+12594,Bhopal-Lucknow Garib Rath Express,BHOPAL JN,22:45,LUCKNOW NE,1:55
+12611,Chennai Central - Hazrat Nizamuddin Garib Rath Express,CHENNAI CENTRAL,6:10,H NIZAMUDDIN,2:55
+12612,Hazrat Nizamuddin - Chennai Central Garibrath Express,H NIZAMUDDIN,15:55,CHENNAI CENTRAL,3:55
+12735,Secunderabad - Yesvantpur Garib Rath Express,SECUNDERABAD JN,20:30,YESVANTPUR JN,4:55
+12736,Yesvantpur - Secunderabad Garib Rath Express,YESVANTPUR JN,16:45,SECUNDERABAD JN,5:55
+12739,Visakhapatnam - Secunderabad Garib Rath Express,VISAKHAPATNAM,20:30,SECUNDERABAD JN,6:55
+12740,Secunderabad- Visakhapatnam Garib Rath Express,SEUNDERABAD JN,20:30,VISAKHAPATNAM,7:55
+12831,Dhanbad - Bhubaneswar Garib Rath Express,DHANBAD JN,16:00,BHUBANESWAR,8:55
+12832,Bhubaneswar - Dhanbad Garib Rath Express,BHUBANESWAR,20:15,DHANBAD JN,9:55
+12877,Ranchi - New Delhi Garib Rath Express,RANCHI,16:40,NEW DELHI,10:55
+12881,Puri - Howrah Garib Rath Express,HOWRAH JN,20:55,PURI,11:55
+12882,Puri - Howrah Garib Rath Express,	PURI,22:15,HOWRAH JN,12:55
+12909,Bandra Terminus - Hazrat Nizamuddin Garib Rath Express,BANDRA TERMINUS,16:35,H NIZAMUDDIN,13:55
+12910,Hazrat Nizamuddin - Mumbai Bandra (T.) Garib Rath Express,H NIZAMUDDIN,15:35,BANDRA TERMINUS,14:55
+12983,Ajmer - Chandigarh Garib Rath Express,AJMER JN,17:55,CHANDIGARH,15:55
+12984,Chandigarh-Ajmer Garib Rath Express,CHANDIGARH,20:50,AJMER JN,16:55
+22405,Bhagalpur - Anand Vihar Terminal Garib Rath Express,BHAGALPUR,13:30,ANAND VIHAR TRM,17:55
+22406,Anand Vihar (T) - Bhagalpur Garib Rath Express,ANAND VIHAR TRM,16:55,BHAGALPUR,18:55
+22407,Varanasi-Anand Vihar Terminal Garib Rath Express,VARANASI JN,19:30,ANAND VIHAR TRM,19:55
+22408,Anand Vihar Terminal - Varanasi Garib Rath Express,ANAND VIHAR TRM,18:15,VARANASI JN,20:55
+22409,Gaya - Anand Vihar Garib Rath Express,GAYA JN,19:30,ANAND VIHAR TRM,21:55
+22410,Anand Vihar - Gaya Garib Rath Express,ANAND VIHAR TRM,19:10,GAYA JN,22:55
+22883,Puri - Yesvantpur Garib Rath Express,PURI,15:00,YESVANTPUR JN,23:55
+22884,Yesvantpur - Puri Weekly Garib Rath Express,YESVANTPUR JN,22:40,PURI,0:55
+12065,Ajmer - Hazrat Nizamuddin Jan Shatabdi Express,AJMER JN,5:45,H NIZAMUDDIN,1:55
+12066,Hazrat Nizamuddin - Ajmer Jan Shatabdi Express,H NIZAMUDDIN,15:30,AJMER JN,2:55
+12067,Guwahati-Jorhat Town Jan Shatabdi Express,GUWAHATI,6:30,JORHAT TOWN,3:55
+12068,Jorhat Town-Guwahati Jan Shatabdi Express,JORHAT TOWN,14:30,GUWAHATI,4:55
+12069,Raigarh-Gondia Jan Shatabdi Express,RAIGARH,6:25,GONDIA JN,5:55
+12070,Gondia-Raigarh Jan Shatabdi Express,GONDIA JN,15:00,RAIGARH,6:55
+12071,Dadar - Jalna Jan Shatabdi Express,DADAR,14:00,JALNA,7:55
+12072,Jalna - Dadar Jan Shatabdi Express,JALNA,4:45,DADAR,8:55
+12073,Howrah - Bhubaneswar Jan Shatabdi Express,HOWRAH JN,13:25,BHUBANESWAR,9:55
+12074,Bhubaneswar - Howrah Jan Shatabdi Express,BHUBANESWAR,6:00,HOWRAH JN,10:55
+12075,Kozhikode - Thiruvananthapuram Jan Shatabdi Express,KOZHIKKODE,13:35,TRIVANDRUM CNTL,11:55
+12076,Thiruvananthapuram - Kozhikode Jan Shatabdi Express,TRIVANDRUM CNTL,6:00,KOZHIKKODE,12:55
+12077,Chennai Central - Vijayawada Jan Shatabdi Express,CHENNAI CENTRAL,7:35,VIJAYAWADA JN,13:55
+12078,Vijayawada - Chennai Central Jan Shatabdi Express,VIJAYAWADA JN,15:20,CHENNAI CENTRAL,14:55
+12079,KSR Bengaluru - Hubballi Janshatabdi Express,KSR BENGALURU,6:00,HUBBALLI JN,15:55
+12080,Hubballi - KSR Bengaluru Janshatabdi Express,HUBBALLI JN,14:00,KSR BENGALURU,16:55
+12081,Kannur - Thiruvananthapuram Central Jan Shatabdi Express,KANNUR,4:45,TRIVANDRUM CNTL,17:55
+12082,Thiruvananthapuram Central - Kannur Jan Shatabdi Express,TRIVANDRUM CNTL,14:30,KANNUR,18:55
+12083,Mayiladuturai - Coimbatore Jan Shatabdi Express,MAYILADUTURAI J,14:50,COIMBATORE JN,19:55
+12084,Coimbatore-Mayiladuthurai Jan Shatabdi Express,COIMBATORE JN,7:10,MAYILADUTURAI J,20:55
+12365,Patna - Ranchi Jan Shatabdi Express,PATNA JN,6:00,RANCHI,21:55
+12366,Ranchi - Patna Jan Shatabdi Express,RANCHI,14:25,PATNA JN,22:55
